@@ -61,6 +61,14 @@ class net:
 			
 		self.db.execute(query, concept_id)
 		return self.db.fetchall()
+
+	# save()
+	# Save the network to GML file
+	#
+	# Arguments:
+	# 	filename - destination file
+	def save(self, filename):
+		nx.write_gml(self.graph, filename)	
  
 	# destructor
 	# Free resources and do clean up
