@@ -54,7 +54,7 @@ class net:
 	#
 	def getconceptchildren(self, concept_id):
 		query = "SELECT r.source_id, d.term " \
-				"FROM relationship r, description d " \
+				"FROM snomed_ct.relationship r, snomed_ct.description d " \
 				"WHERE r.source_id=d.concept_id AND d.active = 1 "\
 				"AND r.active = 1 AND d.type_id = 900000000000003001 "\
 				"AND r.type_id = 116680003 AND r.destination_id = '%s'"
