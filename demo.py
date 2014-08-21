@@ -2,7 +2,7 @@ import MySQLdb
 from snomedtools.net import net
 
 #create database connection
-dbconn = MySQLdb.connect(host="localhost",user="root",passwd="C0msc29.gatech",db="snomed_ct")
+dbconn = MySQLdb.connect(host="localhost",user="root",passwd="",db="snomed_ct")
 
 #Clinical finding hierarchy parent concept ID: 404684003 (starting point)
 #  testing: 73211009 (diabetes)
