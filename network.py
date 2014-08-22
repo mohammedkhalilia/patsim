@@ -2,14 +2,15 @@ import networkx as nx
 
 class Network:
 
-	# __init__: constructor
-	# Creates a cursor to the database and adds the provided 
-	# parent nodes to a new graph
-	#
-	# Arguments:
-	# 	dbconn - connection to the database
-	#  	parent - parent node ID (concept ID)
 	def __init__(self, dbconn, parent):
+		""" constructor
+		Creates a cursor to the database and adds the provided 
+		parent nodes to a new graph
+	
+		Arguments:
+	 		dbconn - connection to the database
+			parent - parent node ID (concept ID)
+		"""
 		self.dbconn = dbconn
 		self.db = dbconn.cursor()
 
@@ -22,14 +23,16 @@ class Network:
 		#recursively add nodes to the graph starting by the parent 
 		self.build(g,parent)
 		
-	# build()
-	# Given a concept ID and a starting graph recursively add nodes
-	# tot he graph by finding the children of the given node (concept)
-	#
-	# Arguments:
-	# 	g 			- the current graph
-	#   concept_id	- concept_id for which will find its children
 	def build(self, g, concept_id):
+		""" Recursively build SNOMED network
+		Given a concept ID and a starting graph recursively add nodes
+		to the graph by finding the children of the given node (concept)
+	
+		Arguments:
+			g -- the current graph
+			concept_id -- concept_id for which will find its children
+		"""
+		
 		#get the child nodes for concept_id
 		children = self.get_concept_children(concept_id)
 	
@@ -46,13 +49,13 @@ class Network:
 		
 		self.graph = g
 	
-	# getconceptchildren()
-	# For some concept find its child concepts
-	#
-	# Arguments:
-	# 	concept_id - concept_id for which we will find its children
-	#
 	def get_concept_children(self, concept_id):
+		""" Get concept children
+		For some concept find its child concepts
+	
+		Arguments:
+			concept_id - concept_id for which we will find its children
+		"""
 		query = "SELECT r.source_id, d.term " \
 				"FROM snomed_ct.relationship r, snomed_ct.description d " \
 				"WHERE r.source_id=d.concept_id AND d.active = 1 "\
@@ -62,20 +65,20 @@ class Network:
 		self.db.execute(query, concept_id)
 		return self.db.fetchall()
 
-	# save()
-	# Save the network to GML file
-	#
-	# Arguments:
-	# 	filename - destination file
 	def save(self, filename):
+		""" Save network to GML file
+		Arguments:
+	 		filename -- destination file
+		"""
 		nx.write_gml(self.graph, filename)	
  
-	# destructor
-	# Free resources and do clean up
-	#
-	# Argument:
-	#	None
 	def __del__(self):
+		""" destructor
+		Free resources and do clean up
+	
+		Argument:
+			None
+		"""
 		#close database cursor
 		self.db.close()
 
