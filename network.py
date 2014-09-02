@@ -1,4 +1,5 @@
 import networkx as nx
+import redis
 
 class Network:
 
@@ -70,8 +71,31 @@ class Network:
 		Arguments:
 	 		filename -- destination file
 		"""
-		nx.write_gml(self.graph, filename)	
- 
+		nx.write_gml(self.graph, filename)		
+	
+ 	def compute_shortest_path(self, keys):
+ 		""" Save the shortest path distance to key-value database
+ 			We will avoid computing the pairwise shortest path among all
+ 			SNOMED concepts as this will be a huge number of pairwise distances.
+ 			Instead we will only store the SNOMED codes that are referenced in the 
+ 			keys argument passed to this method.
+ 			
+ 		Arguments:
+ 			keys -- the keys for which we are interested in storing the 
+ 					pairwise distances for
+ 		"""
+ 		r = redis.Redis("localhost")
+ 		r.flushdb()
+
+ 		#only use the keys that are referenced in the argument "keys"
+ 		concepts = list(set(self.graph.nodes()).intersection(keys))
+ 		num_concepts = len(concepts)
+		
+ 		for i in range(0,num_concepts):
+ 			for j in range(i+1,num_concepts):
+				p = nx.shortest_path(self.graph, concepts[i], concepts[j])
+				r.set("%d:%d" % (concepts[i], concepts[j]),len(p))
+				
 	def __del__(self):
 		""" destructor
 		Free resources and do clean up
