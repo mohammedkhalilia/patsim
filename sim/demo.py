@@ -1,8 +1,9 @@
 import MySQLdb
 import redis
+from patsim.sim import snomed_distance
 
 #create db connection
-dbconn = MySQLdb.connect(host="localhost",user="root",passwd="",db="choa")
+dbconn = MySQLdb.connect(host="localhost",user="root",passwd="C0msc29.gatech",db="choa")
 db = dbconn.cursor()
 
 #check the Redis database
@@ -12,9 +13,9 @@ r = redis.Redis("localhost")
 patient = {}
 query = "select kids_pat_id, concept_id "\
 		"from asthma_dx d, asthma_core c, snomed_ct.dx_mapping m "\
-		"where d.kids_visit_id = c.kids_visit_id and m.dx_code = d.dx_code  "\
+		"where d.kids_visit_id = c.kids_visit_id and m.dx_code = d.dx_code "\
 		"and d.dx_code not like 'E%' and d.dx_code not like 'V%' and in_core = 1 "\
-		"group by kids_pat_id, concept_id limit 100";
+		"group by kids_pat_id, concept_id limit 20";
 		
 db.execute(query)
 rows = db.fetchall()
@@ -24,11 +25,14 @@ for row in rows:
 	pat_id = row[0]
 	
 	if pat_id not in patient:
-		patient[pat_id] = []
+		patient[pat_id] = {'diagnosis':[]}
 	
-	patient[pat_id].append(row[1])
-	
-#Example redis query
-#to get the distance between concept ID 209557005 and 70070008
-d = r.get("%d:%d" % (209557005, 70070008))
-print d
+	patient[pat_id]['diagnosis'].append(row[1])
+
+print patient
+
+#Compute the distance between two patients
+patient1 = patient[patient.keys()[1]]
+patient2 = patient[patient.keys()[2]]
+sd = snomed_distance.SnomedDistance(patient1, patient2)
+print sd.compute("nmax")
