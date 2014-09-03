@@ -1,7 +1,7 @@
 import networkx as nx
 import redis
 
-class Network:
+class Tree:
 
 	def __init__(self, dbconn, parent):
 		""" constructor
