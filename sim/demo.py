@@ -2,7 +2,7 @@ import MySQLdb
 import redis
 
 #create db connection
-dbconn = MySQLdb.connect(host="localhost",user="root",passwd="C0msc29.gatech",db="choa")
+dbconn = MySQLdb.connect(host="localhost",user="root",passwd="",db="choa")
 db = dbconn.cursor()
 
 #check the Redis database
