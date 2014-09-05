@@ -92,7 +92,10 @@ class Tree:
  		num_concepts = len(concepts)
 		
  		for i in range(0,num_concepts):
+ 			r.set("%d:%d" % (concepts[i], concepts[i]), 0)
+ 			
  			for j in range(i+1,num_concepts):
+ 				r.set("%d:%d" % (concepts[j], concepts[j]), 0)
 				p = nx.shortest_path(self.graph, concepts[i], concepts[j])
 				r.set("%d:%d" % (concepts[i], concepts[j]),len(p))
 				

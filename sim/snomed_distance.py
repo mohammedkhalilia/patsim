@@ -72,7 +72,7 @@ class SnomedDistance:
 			Return:
 				d -- distance
 		"""
-		d = np.mean(self.dist_mat.min(1))
+		d = np.mean(self.dist_mat.min(1) + self.dist_mat.min(0))
 		return d
 		
 	def compute_distance_normalized_by_max(self):
