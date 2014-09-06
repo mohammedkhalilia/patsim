@@ -2,7 +2,7 @@ import MySQLdb
 from patsim import snomed
 
 #create database connection
-dbconn = MySQLdb.connect(host="localhost",user="root",passwd="C0msc29.gatech",db="snomed_ct")
+dbconn = MySQLdb.connect(host="localhost",user="root",passwd="",db="snomed_ct")
 
 #Clinical finding hierarchy parent concept ID: 404684003 (starting point)
 #  testing: 73211009 (diabetes)
@@ -10,7 +10,7 @@ dbconn = MySQLdb.connect(host="localhost",user="root",passwd="C0msc29.gatech",db
 
 #build snomed network starting with a specific concept id and pass the db connection
 print "Building the SNOMED tree"
-t = snomed.Tree(dbconn, 404684003)
+t = snomed.Network(dbconn, 404684003)
 
 #save path length to redis key-value database
 #only save the pairwise distances for those concepts that are mapped to ICD9 codes

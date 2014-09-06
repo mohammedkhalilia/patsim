@@ -75,19 +75,6 @@ class SnomedDistance:
 		d = np.mean(self.dist_mat.min(1) + self.dist_mat.min(0))
 		return d
 		
-	def compute_distance_normalized_by_max(self):
-		d_lgst = 5
-
-		normalized_d = np.divide(self.dist_mat + 1, d_lgst)
-		d = np.prod(normalized_d)
-		return d
-		
-	def compute_distance_normalized_by_avg(self):
-		d_avg = 55
-		normalized_d = np.divide(self.dist_mat + 1, d_avg)
-		d = np.prod(normalized_d)
-		return d
-		
 	
 	
 	
